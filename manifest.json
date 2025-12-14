@@ -1,0 +1,21 @@
+{
+  "name": "Tic Tac Toe",
+  "short_name": "XOX",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+   "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/566/566294.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+        "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png" 
+    }
+  ]
+}

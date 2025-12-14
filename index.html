@@ -1,258 +1,239 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<link rel="manifest" href="manifest.json">
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            padding: 16px;
-        }
-
-        /* MAIN CARD */
-        .container {
-            width: 100%;
-            max-width: 360px;          /* perfect for phones */
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 1.6rem;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #777;
-            margin-bottom: 16px;
-        }
-
-        /* INFO BAR */
-        .game-info {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #f4f4f4;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .player-turn {
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .score {
-            display: flex;
-            justify-content: space-around;
-            font-size: 0.9rem;
-        }
-
-        .score-value {
-            font-weight: bold;
-        }
-
-        /* BOARD */
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 8px;
-            background: #f5f5f5;
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-
-        .cell {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.6rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .cell.x { color: #667eea; }
-        .cell.o { color: #764ba2; }
-
-        .cell:disabled {
-            cursor: default;
-        }
-
-        /* BUTTONS */
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        button.main {
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .restart {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .reset {
-            background: #eeeeee;
-        }
-
-        /* DESKTOP IMPROVEMENTS */
-        @media (min-width: 768px) {
-            .container {
-                max-width: 420px;
-                padding: 24px;
-            }
-
-            h1 { font-size: 2rem; }
-
-            .board { gap: 10px; padding: 10px; }
-
-            .cell { font-size: 2rem; }
-
-            .buttons {
-                flex-direction: row;
-            }
-        }
-    </style>
+<style>
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --text:#222;
+  --accent:#667eea;
+}
+.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#f5f5f5;
+  --accent:#ff9800;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:var(--bg);
+  font-family:system-ui;
+  color:var(--text);
+}
+.container{
+  width:100%;
+  max-width:360px;
+  background:var(--card);
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+h1{text-align:center;margin-bottom:6px}
+.subtitle{text-align:center;color:gray;margin-bottom:12px}
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  background:#ccc;
+  padding:8px;
+  border-radius:12px;
+}
+.cell{
+  aspect-ratio:1/1;
+  font-size:2rem;
+  font-weight:bold;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  transition: transform .15s ease, background .2s;
+    
+}
+.cell:active{
+  transform: scale(0.9);
+}
+.cell.x{color:#667eea}
+.cell.o{color:#e91e63}
+.info{text-align:center;margin:10px 0}
+.controls{display:flex;gap:8px;margin-top:10px}
+button,select{
+  flex:1;
+  padding:8px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+}
+.dark-toggle{background:var(--accent);color:#fff}
+</style>
 </head>
+
 <body>
-
 <div class="container">
-    <h1>🎮 Tic Tac Toe</h1>
-    <p class="subtitle">Mobile & Desktop Friendly</p>
+<h1>🎮 Tic Tac Toe</h1>
+<p class="subtitle">PWA Game</p>
 
-    <div class="game-info">
-        <div class="player-turn" id="turn">Player X's Turn</div>
-        <div class="score">
-            <div>X: <span id="sx" class="score-value">0</span></div>
-            <div>Draw: <span id="sd" class="score-value">0</span></div>
-            <div>O: <span id="so" class="score-value">0</span></div>
-        </div>
-    </div>
+<div class="info" id="turn">Player X's Turn</div>
 
-    <div class="board" id="board">
-        <button class="cell" data-i="0"></button>
-        <button class="cell" data-i="1"></button>
-        <button class="cell" data-i="2"></button>
-        <button class="cell" data-i="3"></button>
-        <button class="cell" data-i="4"></button>
-        <button class="cell" data-i="5"></button>
-        <button class="cell" data-i="6"></button>
-        <button class="cell" data-i="7"></button>
-        <button class="cell" data-i="8"></button>
-    </div>
+<select id="mode">
+  <option value="human">👥 Player vs Player</option>
+  <option value="computer" selected>🤖 Player vs Computer</option>
+</select>
 
-    <div class="buttons">
-        <button class="main restart" id="newGame">New Game</button>
-        <button class="main reset" id="resetScore">Reset Scores</button>
-    </div>
+<div class="board">
+  <button class="cell" data-i="0"></button>
+  <button class="cell" data-i="1"></button>
+  <button class="cell" data-i="2"></button>
+  <button class="cell" data-i="3"></button>
+  <button class="cell" data-i="4"></button>
+  <button class="cell" data-i="5"></button>
+  <button class="cell" data-i="6"></button>
+  <button class="cell" data-i="7"></button>
+  <button class="cell" data-i="8"></button>
+</div>
+
+<div class="controls">
+  <button onclick="resetGame()">🔄 Reset</button>
+  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+</div>
 </div>
 
 <script>
-    const cells = document.querySelectorAll('.cell');
-    const turn = document.getElementById('turn');
-    const sx = document.getElementById('sx');
-    const so = document.getElementById('so');
-    const sd = document.getElementById('sd');
+    let scores = JSON.parse(localStorage.getItem('scores')) || {X:0,O:0,D:0};
 
-    let board = Array(9).fill('');
-    let player = 'X';
-    let scores = { X: 0, O: 0, D: 0 };
+// 🔊 Sounds
+const clickSound=new Audio('./sounds/click.mp3');
+const winSound=new Audio('./sounds/win.mp3');
+const drawSound=new Audio('./sounds/draw.mp3');
 
-    const wins = [
-        [0,1,2],[3,4,5],[6,7,8],
-        [0,3,6],[1,4,7],[2,5,8],
-        [0,4,8],[2,4,6]
-    ];
+// Unlock sound (mobile fix)
+document.body.addEventListener('click',()=>{
+  clickSound.play().then(()=>{
+    clickSound.pause();clickSound.currentTime=0;
+  });
+},{once:true});
 
-    function checkWin() {
-        for (let w of wins) {
-            const [a,b,c] = w;
-            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                return board[a];
-            }
-        }
-        return board.includes('') ? null : 'D';
+// Game Logic
+const cells=document.querySelectorAll('.cell');
+const turn=document.getElementById('turn');
+const modeSelect=document.getElementById('mode');
+
+let board=Array(9).fill('');
+let player='X';
+
+const wins=[
+[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],
+[0,4,8],[2,4,6]
+];
+
+cells.forEach(cell=>{
+cell.onclick=()=>{
+  const i=cell.dataset.i;
+  if(board[i])return;
+
+  clickSound.currentTime=0;
+  clickSound.play();
+
+  board[i]=player;
+  cell.textContent=player;
+  cell.classList.add(player.toLowerCase());
+  cell.disabled=true;
+
+  const result=checkWin();
+  if(result){
+    result==='D'?drawSound.play():winSound.play();
+    setTimeout(resetGame,800);
+    return;
+  }
+
+  player=player==='X'?'O':'X';
+  turn.textContent=`Player ${player}'s Turn`;
+
+  if(modeSelect.value==='computer' && player==='O'){
+    setTimeout(computerMove,400);
+  }
+};
+});
+
+function computerMove(){
+  let move = findBestMove();
+  if(move !== null){
+    cells[move].click();
+  }
+}
+
+function findBestMove(){
+  // 1️⃣ Try to WIN
+  for(let i=0;i<9;i++){
+    if(board[i]===''){
+      board[i]='O';
+      if(checkWin()==='O'){ board[i]=''; return i; }
+      board[i]='';
     }
+  }
 
-    function resetBoard() {
-        board.fill('');
-        cells.forEach(c => {
-            c.textContent = '';
-            c.className = 'cell';
-            c.disabled = false;
-        });
-        player = 'X';
-        turn.textContent = "Player X's Turn";
+  // 2️⃣ BLOCK player
+  for(let i=0;i<9;i++){
+    if(board[i]===''){
+      board[i]='X';
+      if(checkWin()==='X'){ board[i]=''; return i; }
+      board[i]='';
     }
+  }
 
-    cells.forEach(cell => {
-        cell.onclick = () => {
-            const i = cell.dataset.i;
-            if (board[i]) return;
+  // 3️⃣ CENTER
+  if(board[4]==='') return 4;
 
-            board[i] = player;
-            cell.textContent = player;
-            cell.classList.add(player.toLowerCase());
-            cell.disabled = true;
+  // 4️⃣ CORNERS
+  const corners=[0,2,6,8];
+  for(let c of corners){
+    if(board[c]==='') return c;
+  }
 
-            const result = checkWin();
-            if (result) {
-                if (result === 'D') scores.D++;
-                else scores[result]++;
-                sx.textContent = scores.X;
-                so.textContent = scores.O;
-                sd.textContent = scores.D;
-                setTimeout(resetBoard, 600);
-            } else {
-                player = player === 'X' ? 'O' : 'X';
-                turn.textContent = `Player ${player}'s Turn`;
-            }
-        };
-    });
+  // 5️⃣ ANY
+  for(let i=0;i<9;i++){
+    if(board[i]==='') return i;
+  }
 
-    document.getElementById('newGame').onclick = resetBoard;
-    document.getElementById('resetScore').onclick = () => {
-        scores = { X: 0, O: 0, D: 0 };
-        sx.textContent = so.textContent = sd.textContent = 0;
-        resetBoard();
-    };
+  return null;
+}
+
+function checkWin(){
+  for(let [a,b,c] of wins){
+    if(board[a]&&board[a]===board[b]&&board[a]===board[c]) return board[a];
+  }
+  return board.includes('')?null:'D';
+}
+
+function resetGame(){
+  board.fill('');
+  cells.forEach(c=>{
+    c.textContent='';
+    c.className='cell';
+    c.disabled=false;
+  });
+  player='X';
+  turn.textContent="Player X's Turn";
+}
+
+// 🌙 Dark Mode
+function toggleDark(){
+  document.body.classList.toggle('dark');
+}
+
+// 📱 PWA
+if('serviceWorker'in navigator){
+  navigator.serviceWorker.register('sw.js');
+}
 </script>
-
 </body>
 </html>
-
